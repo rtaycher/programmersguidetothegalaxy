@@ -13,7 +13,8 @@ examples_log=$(pwd)"/examples.log"
 
 examples=( 
     arrays_lists 
-    arrays_lists_iteration 
+    arrays_lists_iteration
+    arrays_lists_manipulation
     command_line_arguments 
     falsy_values
     extension_methods
@@ -238,4 +239,30 @@ if command_exists nim; then
     done
 else
     echo "Install nim before running the Nim tests";
+fi
+
+if command_exists lein; then
+    echo "Running Clojure examples";
+
+    ((max_test=${#examples[@]}))
+
+    for ((i = 1; i < max_test; i++)); do
+        example_dir="${examples[$i]}"
+        (cd "$example_dir" && lein exec example.clj >> "$examples_log" ) || echo "Error running $example_dir example for Clojure!"
+    done
+else
+    echo "Install lein before running the Clojure tests";
+fi
+
+if command_exists groovy; then
+    echo "Running Groovy examples";
+
+    ((max_test=${#examples[@]}))
+
+    for ((i = 1; i < max_test; i++)); do
+        example_dir="${examples[$i]}"
+        (cd "$example_dir" && groovy example.groovy >> "$examples_log" ) || echo "Error running $example_dir example for Groovy!"
+    done
+else
+    echo "Install groovy before running the Groovy tests";
 fi
